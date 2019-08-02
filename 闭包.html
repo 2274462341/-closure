@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script type="text/javascript">
+
+
+    //  在正常的脚本中，某个方法可以获取到外部的变量，或者全局变量 
+        var num = 11;
+        function func1(){
+            // console.log(num);   // 11
+        }
+        func1();
+
+
+
+
+    //  但是在外部是无法获取方法内部的局部变量的 
+        function func2(){
+            var num1 = 22;
+            num2 = 33;
+        }
+        func2();
+    //  console.log(num1);  //会报错！num1 is not defined
+    //  console.log(num2);  // 可以获取到num2的值，因为不适用var定义变量时，默认是全局变量   33
+
+
+
+
+    //  那么如何在外部获取到内部的变量呢！javascript可以办到 。(创建闭包最常见方式，就是在一个函数内部创建另一个函数)
+    //  闭包的作用域链包含着它自己的作用域，以及包含它的函数的作用域和全局作用域
+        function func3(){
+            var num3 = 44;
+            function func4(){
+                return num3;
+            }
+            return func4;
+        }
+        var func = func3();
+        // console.log(func());    //44
+
+
+
+
+        //函数a 
+        function a(){ 
+            var i=0; 
+            //函数b 
+            function b(){ 
+                alert(++i); 
+            } 
+            return b; 
+        } 
+        //函数c 
+        var c = a(); 
+        c();
+    </script>
+</body>
+
+<script>
+
+    // 闭包的注意事项
+    // 通常，函数的作用域及其所有变量都会在函数执行结束后被销毁。
+    // 但是，在创建了一个闭包以后，这个函数的作用域就会一直保存到闭包不存在为止
+
+    // function makeAdder(x) {
+    //     return function(y) {
+    //         return x + y;
+    //     };
+    // }
+
+    // var add5 = makeAdder(5);
+    // var add10 = makeAdder(10);
+
+    // console.log(add5(2));  // 7
+    // console.log(add10(2)); // 12
+
+    // // 释放对闭包的引用
+    // add5 = null;
+    // add10 = null;
+
+    // 总结一下
+    // 闭包的形成原理: 基于函数变量作用域链的规则 和 垃圾回收机制的引用计数规则。 
+    // 闭包的本质: 内存泄漏，指定内存不释放。 
+    // （不过根据内存泄漏的定义是无法使用，无法回收来说，这不是内存泄漏，由于只是无法回收，但是可以使用，为了使用，不让系统回收）
+
+    // 闭包的典型框架应该就是jquery了。 
+    // 闭包是javascript语言的一大特点，主要应用闭包场合(闭包的用处)主要是为了：设计私有的方法和变量。 
+    // 这在做框架的时候体现更明显，有些方法和属性只是运算逻辑过程中的使用的，不想让外部修改这些属性，因此就可以设计一个闭包来只提供方法获取
+    // 闭包的缺陷
+    // 1. 闭包的缺点就是常驻内存会增大内存使用量，并且使用不当很容易造成内存泄露。
+    //    解决办法：在退出函数之前，将不使用的局部变量全部删除。
+    // 2. 如果不是因为某些特殊任务而需要闭包，在没有必要的情况下，在其它函数中创建函数是不明智的，因为闭包对脚本性能具有负面影响，包括处理速度和内存消耗。
+    //    闭包会在父函数外部，改变父函数内部变量的值。所以，如果你把父函数当作对象（object）使用，把闭包当作它的公用方法（Public Method），
+    //    把内部变量当作它的私有属性（private value），这时一定要小心，不要随便改变父函数内部变量的值。
+    //      网址：https://zhuanlan.zhihu.com/p/24915187
+    //      https://segmentfault.com/a/1190000006875662#articleHeader2
+    //      http://www.ruanyifeng.com/blog/2009/08/learning_javascript_closures.html
+    //      https://www.cnblogs.com/cxying93/p/6103375.html?tdsourcetag=s_pcqq_aiomsg
+    //      https://www.cnblogs.com/xing901022/p/4282503.html
+</script>
+</html>
